@@ -1,6 +1,8 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { allowedNodeEnvironmentFlags } from 'process';
+import { watchFile } from 'fs';
 
 (async () => {
 
@@ -30,6 +32,19 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+
+  app.get("/filteredimage", async ( req: Request, res: Response) => {
+    var files:string[];
+    let { imageUrl } = req.query;
+    if(!imageUrl) {
+      return res.status(400)
+          .send("url is required");
+    }
+    let absolutePath = await filterImageFromURL(imageUrl);
+    files = [absolutePath];
+    res.sendFile(absolutePath);
+    await new Promise(resolve => setTimeout(resolve, 5000)).then(()=>deleteLocalFiles([absolutePath]));
+  });
   
   // Root Endpoint
   // Displays a simple message to the user

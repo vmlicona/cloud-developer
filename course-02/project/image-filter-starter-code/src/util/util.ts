@@ -1,3 +1,5 @@
+import { NextFunction } from 'connect';
+import express, { Request, Response } from 'express';
 import fs from 'fs';
 import Jimp = require('jimp');
 
@@ -17,6 +19,7 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
         .quality(60) // set JPEG quality
         .greyscale() // set greyscale
         .write(__dirname+outpath, (img)=>{
+            console.log(__dirname+outpath);
             resolve(__dirname+outpath);
         });
     });
