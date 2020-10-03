@@ -35,12 +35,12 @@ import { watchFile } from 'fs';
 
   app.get("/filteredimage", async ( req: Request, res: Response) => {
     var files:string[];
-    let { imageUrl } = req.query;
-    if(!imageUrl) {
+    let { image_url } = req.query;
+    if(!image_url) {
       return res.status(400)
           .send("url is required");
     }
-    let absolutePath = await filterImageFromURL(imageUrl);
+    let absolutePath = await filterImageFromURL(image_url);
     files = [absolutePath];
     res.sendFile(absolutePath);
     await new Promise(resolve => setTimeout(resolve, 5000)).then(()=>deleteLocalFiles([absolutePath]));
